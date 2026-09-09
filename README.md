@@ -115,3 +115,17 @@ Step 2: Member 2 gives their deployed Blockchain Address to Member 3.
 Step 3: Member 3 links the Fingerprint function + Blockchain Address inside server.js.
 Step 4: Member 4 connects the web forms to Member 3's server address (http://localhost:5000).
 Step 5 (Verification): You (the Captain) sit down with Member 6, upload Original.pdf and Tampered.pdf, and confirm the website correctly shows Green and Red badges!
+
+
+IMPORTANT :
+Step-by-Step Submission Flow for Teammates:
+STEP 1- Member creates their own feature branch in VS Code terminal:
+
+git checkout -b feature-frontend 
+
+STEP 2-Member writes code and saves files in VS Code.
+
+STEP 3- Member uploads changes to GitHub:
+git add .
+git commit -m "Finished upload page UI"
+git push origin feature-frontend
