@@ -1,0 +1,51 @@
+# ============================================================
+# Anti-Tamper Contract Vault — Root .gitignore
+# CRITICAL: Private keys and secrets must NEVER be committed
+# ============================================================
+
+# ── Environment Variables (NEVER COMMIT) ──────────────────
+.env
+.env.local
+.env.*.local
+**/.env
+**/.env.local
+
+# ── Node Modules ──────────────────────────────────────────
+node_modules/
+**/node_modules/
+
+# ── Hardhat Build Artifacts ───────────────────────────────
+blockchain/artifacts/
+blockchain/cache/
+blockchain/typechain/
+blockchain/typechain-types/
+
+# ── React / Vite Build Output ─────────────────────────────
+web2/dist/
+web2/build/
+web2/.vite/
+
+# ── Backend Uploads (temp) ────────────────────────────────
+backend/uploads/
+
+# ── Coverage & Test Reports ───────────────────────────────
+coverage/
+**/coverage/
+*.lcov
+
+# ── Logs ──────────────────────────────────────────────────
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# ── OS & Editor Files ─────────────────────────────────────
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# ── Misc ──────────────────────────────────────────────────
+*.tgz
+*.zip

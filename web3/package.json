@@ -1,0 +1,17 @@
+{
+  "name": "contract-vault-web3",
+  "version": "1.0.0",
+  "description": "ethers.js + Pinata integration layer for blockchain and IPFS",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "anchor": "node anchorDocument.js",
+    "verify": "node verifyDocument.js"
+  },
+  "dependencies": {
+    "@pinata/sdk": "^2.1.0",
+    "dotenv": "^16.4.0",
+    "ethers": "^6.13.0",
+    "form-data": "^4.0.0"
+  }
+}
