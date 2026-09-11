@@ -1,10 +1,10 @@
 /**
- * anchorDocument.js
+ * revokeDocument.js
  *
- * Calls the ContractVault.anchorDocument() function on Polygon using ethers.js v6.
+ * Calls the ContractVault.revokeDocument() function on Polygon using ethers.js v6.
  * Invoked by the backend server as a child process.
  *
- * Usage (via backend): node anchorDocument.js <sha256-hash>
+ * Usage (via backend): node revokeDocument.js <sha256-hash> "<reason>"
  * Output: Prints a single JSON line to stdout.
  */
 
@@ -41,18 +41,16 @@ const NETWORK_CONFIG = {
 
 // ── Main ───────────────────────────────────────────────────────────────────
 
-async function anchorDocument(hash, ipfsHash, parentHash, validUntil) {
+async function revokeDocument(hash, reason) {
   if (!ALCHEMY_API_KEY) throw new Error("Missing ALCHEMY_API_KEY in .env");
   if (!PRIVATE_KEY)     throw new Error("Missing POLYGON_PRIVATE_KEY in .env");
   if (!CONTRACT_ADDRESS) throw new Error("Missing CONTRACT_ADDRESS in .env");
   if (!hash)            throw new Error("No hash argument provided.");
 
-  const _ipfsHash = ipfsHash || "";
-  const _parentHash = parentHash || "";
-  const _validUntil = validUntil ? BigInt(validUntil) : 0n;
-
   const config = NETWORK_CONFIG[NETWORK];
   if (!config) throw new Error(`Unknown network: ${NETWORK}`);
+
+  const _reason = reason || "Revoked by admin";
 
   // Create provider and signer
   const provider = new ethers.JsonRpcProvider(config.rpcUrl);
@@ -61,16 +59,16 @@ async function anchorDocument(hash, ipfsHash, parentHash, validUntil) {
   // Connect to the deployed contract
   const contract = new ethers.Contract(CONTRACT_ADDRESS, CONTRACT_ABI, wallet);
 
-  // Estimate gas (for informational logging)
-  const gasEstimate = await contract.anchorDocument.estimateGas(hash, _ipfsHash, _parentHash, _validUntil);
-  console.error(`[ANCHOR] Gas estimate: ${gasEstimate.toString()}`);
+  // Estimate gas
+  const gasEstimate = await contract.revokeDocument.estimateGas(hash, _reason);
+  console.error(`[REVOKE] Gas estimate: ${gasEstimate.toString()}`);
 
   // Send the transaction
-  const tx = await contract.anchorDocument(hash, _ipfsHash, _parentHash, _validUntil, {
+  const tx = await contract.revokeDocument(hash, _reason, {
     gasLimit: gasEstimate * 120n / 100n, // 20% buffer
   });
 
-  console.error(`[ANCHOR] Transaction submitted: ${tx.hash}`);
+  console.error(`[REVOKE] Transaction submitted: ${tx.hash}`);
 
   // Wait for 2 confirmations
   const receipt = await tx.wait(2);
@@ -91,10 +89,10 @@ async function anchorDocument(hash, ipfsHash, parentHash, validUntil) {
 
 // ── CLI Entry Point ────────────────────────────────────────────────────────
 
-const [,, hashArg, ipfsHashArg, parentHashArg, validUntilArg] = process.argv;
+const [,, hashArg, reasonArg] = process.argv;
 
-anchorDocument(hashArg, ipfsHashArg, parentHashArg, validUntilArg).catch((err) => {
-  console.error("[ANCHOR FATAL]", err.message);
+revokeDocument(hashArg, reasonArg).catch((err) => {
+  console.error("[REVOKE FATAL]", err.message);
   console.log(JSON.stringify({ success: false, error: err.message }));
   process.exit(1);
 });

@@ -1,85 +1,303 @@
-/**
- * ContractVault ABI
- *
- * This file exports the ABI for the ContractVault smart contract.
- * Keep this in sync with /blockchain/contracts/ContractVault.sol.
- *
- * Auto-generated from the Solidity source. Update after recompilation.
- */
-
-export const CONTRACT_ABI = [
-  // ── Events ──────────────────────────────────────────────────────────
+export const CONTRACT_ABI = 
+[
   {
-    type: "event",
-    name: "DocumentAnchored",
-    inputs: [
-      { name: "hash",       type: "string",  indexed: true  },
-      { name: "anchoredBy", type: "address", indexed: true  },
-      { name: "timestamp",  type: "uint256", indexed: false },
-    ],
-    anonymous: false,
-  },
-
-  // ── Write Functions ──────────────────────────────────────────────────
-  {
-    type: "function",
-    name: "anchorDocument",
-    stateMutability: "nonpayable",
-    inputs:  [{ name: "_hash", type: "string" }],
-    outputs: [],
-  },
-
-  // ── Read Functions ───────────────────────────────────────────────────
-  {
-    type: "function",
-    name: "verifyDocument",
-    stateMutability: "view",
-    inputs:  [{ name: "_hash", type: "string" }],
-    outputs: [
-      { name: "_exists",     type: "bool"    },
-      { name: "_timestamp",  type: "uint256" },
-      { name: "_anchoredBy", type: "address" },
-    ],
+    "inputs": [],
+    "stateMutability": "nonpayable",
+    "type": "constructor"
   },
   {
-    type: "function",
-    name: "getRecord",
-    stateMutability: "view",
-    inputs:  [{ name: "_hash", type: "string" }],
-    outputs: [
+    "inputs": [],
+    "name": "DocumentAlreadyRevoked",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "DocumentNotFound",
+    "type": "error"
+  },
+  {
+    "inputs": [
       {
-        name: "",
-        type: "tuple",
-        components: [
-          { name: "hash",       type: "string"  },
-          { name: "timestamp",  type: "uint256" },
-          { name: "anchoredBy", type: "address" },
-          { name: "exists",     type: "bool"    },
-        ],
-      },
+        "internalType": "string",
+        "name": "docHash",
+        "type": "string"
+      }
     ],
+    "name": "HashAlreadyAnchored",
+    "type": "error"
   },
   {
-    type: "function",
-    name: "totalAnchored",
-    stateMutability: "view",
-    inputs:  [],
-    outputs: [{ name: "", type: "uint256" }],
+    "inputs": [],
+    "name": "InvalidHash",
+    "type": "error"
   },
   {
-    type: "function",
-    name: "owner",
-    stateMutability: "view",
-    inputs:  [],
-    outputs: [{ name: "", type: "address" }],
+    "inputs": [],
+    "name": "UnauthorizedRevocation",
+    "type": "error"
   },
-
-  // ── Constructor ──────────────────────────────────────────────────────
   {
-    type: "constructor",
-    inputs: [],
-    stateMutability: "nonpayable",
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "string",
+        "name": "docHash",
+        "type": "string"
+      },
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "anchoredBy",
+        "type": "address"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "timestamp",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "string",
+        "name": "parentHash",
+        "type": "string"
+      }
+    ],
+    "name": "DocumentAnchored",
+    "type": "event"
   },
-];
-
-export default CONTRACT_ABI;
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "string",
+        "name": "docHash",
+        "type": "string"
+      },
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "revokedBy",
+        "type": "address"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "timestamp",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "string",
+        "name": "reason",
+        "type": "string"
+      }
+    ],
+    "name": "DocumentRevoked",
+    "type": "event"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "string",
+        "name": "_docHash",
+        "type": "string"
+      },
+      {
+        "internalType": "string",
+        "name": "_ipfsHash",
+        "type": "string"
+      },
+      {
+        "internalType": "string",
+        "name": "_parentHash",
+        "type": "string"
+      },
+      {
+        "internalType": "uint256",
+        "name": "_validUntil",
+        "type": "uint256"
+      }
+    ],
+    "name": "anchorDocument",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "string",
+        "name": "_docHash",
+        "type": "string"
+      }
+    ],
+    "name": "getDocumentHistory",
+    "outputs": [
+      {
+        "internalType": "bool",
+        "name": "_isRevoked",
+        "type": "bool"
+      },
+      {
+        "internalType": "uint256",
+        "name": "_validUntil",
+        "type": "uint256"
+      },
+      {
+        "internalType": "string",
+        "name": "_revocationReason",
+        "type": "string"
+      },
+      {
+        "internalType": "string",
+        "name": "_parentHash",
+        "type": "string"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "string",
+        "name": "_docHash",
+        "type": "string"
+      }
+    ],
+    "name": "getRecord",
+    "outputs": [
+      {
+        "components": [
+          {
+            "internalType": "string",
+            "name": "docHash",
+            "type": "string"
+          },
+          {
+            "internalType": "string",
+            "name": "ipfsHash",
+            "type": "string"
+          },
+          {
+            "internalType": "uint256",
+            "name": "timestamp",
+            "type": "uint256"
+          },
+          {
+            "internalType": "address",
+            "name": "anchoredBy",
+            "type": "address"
+          },
+          {
+            "internalType": "string",
+            "name": "parentHash",
+            "type": "string"
+          },
+          {
+            "internalType": "uint256",
+            "name": "validUntil",
+            "type": "uint256"
+          },
+          {
+            "internalType": "bool",
+            "name": "isRevoked",
+            "type": "bool"
+          },
+          {
+            "internalType": "string",
+            "name": "revocationReason",
+            "type": "string"
+          },
+          {
+            "internalType": "bool",
+            "name": "exists",
+            "type": "bool"
+          }
+        ],
+        "internalType": "struct ContractVault.DocumentRecord",
+        "name": "",
+        "type": "tuple"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "owner",
+    "outputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "string",
+        "name": "_docHash",
+        "type": "string"
+      },
+      {
+        "internalType": "string",
+        "name": "_reason",
+        "type": "string"
+      }
+    ],
+    "name": "revokeDocument",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "totalAnchored",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "string",
+        "name": "_docHash",
+        "type": "string"
+      }
+    ],
+    "name": "verifyDocument",
+    "outputs": [
+      {
+        "internalType": "bool",
+        "name": "_exists",
+        "type": "bool"
+      },
+      {
+        "internalType": "uint256",
+        "name": "_timestamp",
+        "type": "uint256"
+      },
+      {
+        "internalType": "address",
+        "name": "_anchoredBy",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  }
+]
+;

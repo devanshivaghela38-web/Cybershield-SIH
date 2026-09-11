@@ -48,22 +48,28 @@ async function verifyDocument(hash) {
   const provider = new ethers.JsonRpcProvider(config.rpcUrl);
   const contract = new ethers.Contract(CONTRACT_ADDRESS, CONTRACT_ABI, provider);
 
-  // Call verifyDocument (view function — no gas, no transaction)
-  const [exists, timestamp, anchoredBy] = await contract.verifyDocument(hash);
+  // Call getRecord (view function — no gas, no transaction)
+  const record = await contract.getRecord(hash);
+  const exists = record.exists;
 
   const result = {
     success:     true,
     hash,
     exists,
-    timestamp:   exists ? timestamp.toString() : null,
-    anchoredBy:  exists ? anchoredBy : null,
+    timestamp:   exists ? record.timestamp.toString() : null,
+    anchoredBy:  exists ? record.anchoredBy : null,
     anchoredDate: exists
-      ? new Date(Number(timestamp) * 1000).toISOString()
+      ? new Date(Number(record.timestamp) * 1000).toISOString()
       : null,
     explorerUrl: exists
       ? `${config.explorerBase}/address/${CONTRACT_ADDRESS}`
       : null,
     network:     NETWORK,
+    ipfsHash:    exists ? record.ipfsHash : "",
+    parentHash:  exists ? record.parentHash : "",
+    validUntil:  exists ? record.validUntil.toString() : "0",
+    isRevoked:   exists ? record.isRevoked : false,
+    revocationReason: exists ? record.revocationReason : "",
   };
 
   console.log(JSON.stringify(result));
